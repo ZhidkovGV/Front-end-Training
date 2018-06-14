@@ -1,0 +1,25 @@
+{
+  "name": "front-end-training",
+  "version": "1.0.0",
+  "description": "rxjs+githubAPI",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZhidkovGV/Front-end-Training.git"
+  },
+  "keywords": [
+    "js",
+    "rxjs",
+    "front-end",
+    "githubAPI"
+  ],
+  "author": "Shidkov Gleb",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ZhidkovGV/Front-end-Training/issues"
+  },
+  "homepage": "https://github.com/ZhidkovGV/Front-end-Training#readme"
+}
