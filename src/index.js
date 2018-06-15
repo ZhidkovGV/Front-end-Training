@@ -1,18 +1,6 @@
-import { fromEvent } from 'rxjs';
+import { Observable, Subject, ReplaySubject, from, of, range } from 'rxjs';
+import { map, filter, switchMap } from 'rxjs/operators';
 
-const el = document.body;
-
-// Create an Observable that will publish mouse movements
-const mouseMoves = fromEvent(el, 'click');
-
-// Subscribe to start listening for mouse-move events
-const subscription = mouseMoves.subscribe((event) => {
-    // Log coords of mouse movements
-    console.log(`Coords: ${event.clientX} X ${event.clientY}`);
-
-    // When the mouse is over the upper-left of the screen,
-    // unsubscribe to stop listening for mouse movements
-    if (event.clientX < 40 && event.clientY < 40) {
-        subscription.unsubscribe();
-    }
-});
+range(1, 200)
+    .pipe(filter(x => x % 2 === 1), map(x => x + x))
+    .subscribe(x => console.log(x));
