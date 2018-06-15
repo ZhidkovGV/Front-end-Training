@@ -12667,9 +12667,30 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-Object(rxjs__WEBPACK_IMPORTED_MODULE_0__["range"])(1, 200)
-    .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["filter"])(x => x % 2 === 1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(x => x + x))
-    .subscribe(x => console.log(x));
+const input = document.querySelector('input');
+const autoComplete = document.querySelector('.auto-complete');
+const autoCompleteItems = Array.from(document.querySelectorAll('.auto-complete-items li'));
+const inputChanges = Object(rxjs__WEBPACK_IMPORTED_MODULE_0__["fromEvent"])(input,'input');
+
+const render = (info) => {
+    autoCompleteItems.forEach((item, index) => {
+        item.innerText = info[index].name || ""
+    });
+};
+
+const requestInfo = (req) => {
+    fetch(`https://api.github.com/search/repositories?q=${req}+in:name&client_id=41af896cd9f20012e512&client_secret=ae08199ed8be428e92e742a8eca4d8d4aeff4e9b`)
+        .catch(err => console.log(err))
+        .then(res => res.json())
+        .then(res => render(res.items))
+};
+
+inputChanges.subscribe((event) => {
+    const response = requestInfo(event.target.value);
+    /*render(response.items)*/
+
+});
+
 
 /***/ })
 

@@ -5,4 +5,14 @@
 
 body {
     width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.auto-complete-items{
+    list-style-type: none;
+    padding: 1%;
+}
+.auto-complete {
+   /* display: none;*/
+    border: 1px solid black
 }
