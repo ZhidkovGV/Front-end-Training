@@ -13,6 +13,6 @@ body {
     padding: 1%;
 }
 .auto-complete {
-   /* display: none;*/
+    display: none;
     border: 1px solid black
 }
