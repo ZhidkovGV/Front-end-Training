@@ -16,3 +16,7 @@ body {
     display: none;
     border: 1px solid black
 }
+.not-validated {
+    color: red;
+    display: none;
+}

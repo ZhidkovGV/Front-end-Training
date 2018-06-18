@@ -12706,36 +12706,39 @@ __webpack_require__.r(__webpack_exports__);
 
 const input = document.querySelector('input');
 const autoComplete = document.querySelector('.auto-complete');
-
+const notValidated = document.querySelector('.not-validated');
 const autoCompleteItems = Array.from(document.querySelectorAll('.auto-complete-items li'));
 
-const inputChanges = Object(rxjs__WEBPACK_IMPORTED_MODULE_0__["fromEvent"])(input, 'input').pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["debounce"])(() => Object(rxjs_observable_timer__WEBPACK_IMPORTED_MODULE_2__["timer"])(200)));
+const inputChanges = Object(rxjs__WEBPACK_IMPORTED_MODULE_0__["fromEvent"])(input, 'input').pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["debounce"])(() => Object(rxjs_observable_timer__WEBPACK_IMPORTED_MODULE_2__["timer"])(100)));
 const completeSearch = Object(rxjs__WEBPACK_IMPORTED_MODULE_0__["fromEvent"])(autoComplete, 'click');
-
-const requestUser = (req) => {
-    return fetch(`${req}`)
-        .catch(err => console.log(err))
-        .then(res => res.json());
-};
 
 const render = (info) => {
     autoComplete.style.display = "block";
     autoCompleteItems.forEach((item, index) => {
-        const userInfo =  Object(rxjs__WEBPACK_IMPORTED_MODULE_0__["from"])(fetch(info.items[index].owner.url))
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["flatMap"])(res => Object(rxjs__WEBPACK_IMPORTED_MODULE_0__["from"])(res.json())))
+        const userInfo = Object(rxjs__WEBPACK_IMPORTED_MODULE_0__["from"])(fetch(info.items[index].owner.url))
+            .pipe(
+                Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["flatMap"])(res => Object(rxjs__WEBPACK_IMPORTED_MODULE_0__["from"])(res.json()))
+            )
             .subscribe((res) => {
-                item.innerText = `${info.items[index].name} -${res.followers || '0'} followers`
+                item.innerText = `${info.items[index].name} -${res.followers || 'no info about'} followers`
             });
     });
 };
 
 inputChanges.subscribe((event) => {
-    const repos = Object(rxjs__WEBPACK_IMPORTED_MODULE_0__["from"])(fetch(`https://api.github.com/search/repositories?q=${event.target.value}+in:name&client_id=41af896cd9f20012e512&client_secret=ae08199ed8be428e92e742a8eca4d8d4aeff4e9b`))
-        .pipe(
-            Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["flatMap"])(res => Object(rxjs__WEBPACK_IMPORTED_MODULE_0__["from"])(res.json()))
-        ).subscribe((fetchRes) => {
-            render(fetchRes)
-        });
+    let isValidated = event.target.value !== '' && !event.target.value.match(/[\s#$%^&@*?]/);
+    if (isValidated) {
+        notValidated.style.display = "none";
+        const repos = Object(rxjs__WEBPACK_IMPORTED_MODULE_0__["from"])(fetch(`https://api.github.com/search/repositories?q=${event.target.value}+in:name&client_id=41af896cd9f20012e512&client_secret=ae08199ed8be428e92e742a8eca4d8d4aeff4e9b`))
+            .pipe(
+                Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["flatMap"])(res => Object(rxjs__WEBPACK_IMPORTED_MODULE_0__["from"])(res.json()))
+            ).subscribe((fetchRes) => {
+                render(fetchRes)
+            });
+    } else {
+        autoComplete.style.display = "none";
+        notValidated.style.display = "block";
+    }
 });
 
 completeSearch.subscribe((event) => {
@@ -12760,17 +12763,7 @@ completeSearch.subscribe((event) => {
 
 
 
-/*(() => {
-    let test = from(fetch('https://api.github.com/search/repositories?q=+in:name&client_id=41af896cd9f20012e512&client_secret=ae08199ed8be428e92e742a8eca4d8d4aeff4e9b'))
-        .pipe(
-            catchError(err => console.log(err)),
-            flatMap(res => from(res.json()))
-        ).subscribe((fetchRes) => {
-            console.log(fetchRes)
-        });
 
-    let secTest = from([1,2,3]).pipe(map(el => el+1), filter(el => el % 2 === 0)).subscribe(res => console.log(res))
-})();*/
 
 /***/ })
 
