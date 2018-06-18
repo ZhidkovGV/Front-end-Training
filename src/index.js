@@ -1,5 +1,5 @@
-import {Observable, Subject, ReplaySubject, from, of, fromEvent} from 'rxjs';
-import {map, filter, switchMap, flatMap, debounce, bufferCount, catchError} from 'rxjs/operators';
+import {from, fromEvent} from 'rxjs';
+import {flatMap, debounce} from 'rxjs/operators';
 import {timer} from 'rxjs/observable/timer';
 
 const input = document.querySelector('input');
